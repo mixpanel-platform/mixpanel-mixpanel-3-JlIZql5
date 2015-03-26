@@ -177,7 +177,7 @@ svg {
             linkElements.enter() // for any new link data, add corresponding link elements
               .insert('line', ':first-child') // prepend links so that they are always behind nodes
                 .attr('class', 'link')
-                .style('stroke-width', function(d) { return countScale(d.count); }); // set link width based on count
+                .style('stroke-width', function(d) { return countScale(d.count); }) // set link width based on count
                 .append('title')                           // <= add this line
                   .text(function (d) { return d.count; }); // <= add this line
 
