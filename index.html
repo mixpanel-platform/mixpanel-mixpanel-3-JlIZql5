@@ -41,16 +41,12 @@ svg {
         var eventSelect = $('#eventSelect').MPEventSelect();
 
         var runQuery = function (events) {
-          
-            console.log('Making a funnel query with events:', eventsArray);
+            console.log('Making a funnel query with events:', events);
 
-            var params = dateSelect.MPDatepicker('value');
-            var args = events.concat([params]);
-
-            // Call the funnel endpoint with the events in eventsArrah.
-            // If eventsArray is ['A', 'B', 'C'], this is equivalent to calling
-            // MP.api.funnel('A', 'B', 'C', params) ...
-            MP.api.funnel.apply(MP.api, args).done(function(funnelData) {
+            // Call the funnel endpoint passing events
+            // If events is ['A', 'B', 'C'], this is equivalent to calling
+            // MP.api.funnel('A', 'B', 'C') ...
+            MP.api.funnel.apply(MP.api, events).done(function(funnelData) {
 
                 // Sum step counts
                 var steps = _.map(funnelData, function (step) {
