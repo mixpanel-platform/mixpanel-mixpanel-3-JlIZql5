@@ -10,6 +10,7 @@
     <div class="mixpanel-platform-section">
       <div id="eventSelect" style="float: left;"></div>
       <div id="dateSelect" style="float: right;"></div>
+      <div style="clear: both;"></div>
     </div>
     <script>
         var eventsArray = ['$signup'];
@@ -18,6 +19,8 @@
         var dateSelect = $('#dateSelect').MPDatepicker();
 
         var runQuery = function () {
+            console.log('Making a funnel query with events:', eventsArray);
+
             var params = dateSelect.MPDatepicker('value');
             var args = eventsArray.concat([params]);
 
@@ -25,6 +28,7 @@
             // If eventsArray is ['A', 'B', 'C'], this is equivalent to calling
             // MP.api.funnel('A', 'B', 'C', params) ...
             MP.api.funnel.apply(MP.api, args).done(function(funnelData) {
+                console.log('Results:');
                 console.log(funnelData);
             });
         };
