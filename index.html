@@ -65,17 +65,21 @@
                         // Only create a link if one doesn't exist for these two events yet
                         if (!_.has(linksMap, step.event + '-' + nextStep.event)) {
                             var link = {
-                                source: nodesMap[step.event], // link target and source values are set as corresponding nodes
+                                // link target and source values are set as corresponding nodes
+                                source: nodesMap[step.event],
                                 target: nodesMap[nextStep.event],
                                 count: nextStep.count // link count is the target node count
                             };
-                            linksMap[step.event + '-' + nextStep.event] = link; // add the new link to our data structures
+                            // add the new link to our data structures
+                            linksMap[step.event + '-' + nextStep.event] = link;
                             linksArray.push(link);
                         }
                     }
                 });
 
+                console.log('Nodes:')
                 console.log(nodesArray);
+                console.log('Links:')
                 console.log(linksArray);
             });
         };
