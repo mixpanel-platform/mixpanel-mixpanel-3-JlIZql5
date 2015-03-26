@@ -166,7 +166,7 @@ svg {
             var nodeContainers = nodeElements.enter() // for any new node data, add corresponding node elements
               .append("g")
                 .attr("class", "node")
-                .call(force.drag);
+                .call(forceLayout.drag);
 
             nodeContainers
               .append('circle') // for each new node, add a circle element
