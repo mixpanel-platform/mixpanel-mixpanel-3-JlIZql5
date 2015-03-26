@@ -107,7 +107,11 @@ svg {
             // Only add events that we aren't already querying on
             if (!_.contains(eventsArray, event)) {
                 eventsArray.push(event); // add the new event to our events array
-                runQuery(eventsArray);
+                
+                var funnels = getFunnels(eventsArray);
+                _.each(funnels, function (funnel) {
+                    runQuery(funnel);
+                });
             }
         });
         
