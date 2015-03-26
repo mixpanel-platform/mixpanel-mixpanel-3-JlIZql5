@@ -48,6 +48,23 @@
                 runQuery();
             }
         });
+        
+        var width = 960;  // SVG element width
+        var height = 640; // SVG element height
+
+        var svg = d3.select("body").append("svg") // the SVG element
+            .attr("width", width)
+            .attr("height", height);
+
+        var linkElements = svg.selectAll(".link"); // the link elements
+        var nodeElements = svg.selectAll(".node"); // the node elements
+
+        var colorScale = d3.scale.category20(); // used in combination with colorIndex to select a different color for each node
+        var countScale = d3.scale.linear().range([0, 40]);   // maps our link widths to values from 0px to 40px
+        var strengthScale = d3.scale.linear().range([0, 1]); // Maps our link strengths to values from 0 to 1
+
+        var colorIndex = 0; // incremented to select a different color for each node
+        var nodeIndex = 0;  // incremented to be display a funnel step number in node labels
     </script>
   </body>
 </html>
