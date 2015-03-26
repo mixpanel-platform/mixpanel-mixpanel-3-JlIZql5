@@ -15,6 +15,8 @@
     </div>
     <script>
         var eventsArray = ['$signup'];
+        var nodesMap = {}, nodesArray = []; // stores our node data
+        var linksMap = {}, linksArray = []; // stores our link data
 
         var eventSelect = $('#eventSelect').MPEventSelect();
         var dateSelect = $('#dateSelect').MPDatepicker();
@@ -29,8 +31,52 @@
             // If eventsArray is ['A', 'B', 'C'], this is equivalent to calling
             // MP.api.funnel('A', 'B', 'C', params) ...
             MP.api.funnel.apply(MP.api, args).done(function(funnelData) {
-                console.log('Results:');
-                console.log(funnelData);
+
+                // Sum step counts
+                var steps = _.map(funnelData, function (step) {
+                    return {
+                        event: _.first(_.values(step)).event,
+                        count: _.sum(_.pluck(step, 'count'))
+                    };
+                });
+
+                // Add nodes
+                _.each(steps, function (step, i) {
+                    step = _.clone(step); // copy step so that it isn't modified
+                    var event = step.event;
+                    var count = step.count;
+
+                    if (_.has(nodesMap, event)) { // if the node already exists check its count
+                        // Each node's count should be the max value it has in any funnel
+                        nodesMap[event].count = _.max([nodesMap[event].count, count]);
+                    } else if (count) { // otherwise create node if it has a non-zero count
+                        nodesMap[event] = step; // add the new node to our data structures
+                        nodesArray.push(step);
+                    }
+                });
+
+                // Add links
+                _.each(steps, function (step, i) {
+                    var nextStep = steps[i + 1];
+
+                    // Only create a link if nextStep exists and has a non-zero count
+                    if (nextStep && nextStep.count && _.has(nodesMap, nextStep.event)) {
+
+                        // Only create a link if one doesn't exist for these two events yet
+                        if (!_.has(linksMap, step.event + '-' + nextStep.event)) {
+                            var link = {
+                                source: nodesMap[step.event], // link target and source values are set as corresponding nodes
+                                target: nodesMap[nextStep.event],
+                                count: nextStep.count // link count is the target node count
+                            };
+                            linksMap[step.event + '-' + nextStep.event] = link; // add the new link to our data structures
+                            linksArray.push(link);
+                        }
+                    }
+                });
+
+                console.log(nodesArray);
+                console.log(linksArray);
             });
         };
 
